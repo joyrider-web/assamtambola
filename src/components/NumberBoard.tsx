@@ -50,6 +50,14 @@ export function NumberBoard({ drawnNumbers, currentNumber }: NumberBoardProps) {
           Remaining ({90 - drawnNumbers.length})
         </span>
       </div>
+      <a
+        href="https://wa.me/918638979028?text=I%20want%20to%20buy%20tickets"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-4 w-full inline-flex items-center justify-center rounded-lg px-4 py-3 font-body font-bold text-sm tracking-wide transition-all bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-crimson"
+      >
+        BOOK NOW
+      </a>
     </div>
   );
 }
