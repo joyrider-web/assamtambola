@@ -109,14 +109,15 @@ export function generateSimpleTicket(): (number | null)[][] {
     rowCounts[availRows[0]]++;
   }
 
-  // Build grid
+  // Build grid - ensure no repeated numbers per column
   const grid: (number | null)[][] = [[],[],[]];
-  for (let row = 0; row < 3; row++) {
-    for (let col = 0; col < 9; col++) {
+  for (let col = 0; col < 9; col++) {
+    const pool = [...columns[col]].sort(() => Math.random() - 0.5);
+    let pickIndex = 0;
+    for (let row = 0; row < 3; row++) {
       if (colRowMap[col].includes(row)) {
-        const pool = columns[col];
-        const num = pool[Math.floor(Math.random() * pool.length)];
-        grid[row].push(num);
+        grid[row].push(pool[pickIndex]);
+        pickIndex++;
       } else {
         grid[row].push(null);
       }
