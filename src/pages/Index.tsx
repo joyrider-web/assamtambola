@@ -196,37 +196,18 @@ export default function Index() {
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {players.map((player, idx) => {
+                    {players.map((player) => {
                       const playerTickets = tickets.filter(t => t.player_id === player.id);
-                      return (
-                        <div key={player.id} className="rounded-xl overflow-hidden shadow-card animate-slide-up" style={{ background: 'hsl(var(--background))' }}>
-                          <div className="flex items-center gap-2 px-4 py-2"
-                            style={{ background: 'hsl(var(--primary))' }}>
-                            <span className="text-primary-foreground font-bold text-sm">
-                              {idx + 1}:({player.name})
-                            </span>
-                            <span className="text-primary-foreground/80 text-xs shrink-0 ml-auto font-bold">
-                              {playerTickets.length > 0 ? 'BOOKED' : 'NO TICKET'}
-                            </span>
-                          </div>
-                          <div className="p-3">
-                          <div className="space-y-2">
-                            {playerTickets.map(ticket => (
-                              <TambolaTicket
-                                key={ticket.id}
-                                ticket={ticket}
-                                drawnNumbers={drawnNumbers}
-                                playerName={player.name}
-                                compact
-                              />
-                            ))}
-                            {playerTickets.length === 0 && (
-                              <p className="text-muted-foreground text-xs text-center py-2">No ticket assigned</p>
-                            )}
-                          </div>
-                          </div>
+                      return playerTickets.map(ticket => (
+                        <div key={ticket.id} className="animate-slide-up">
+                          <TambolaTicket
+                            ticket={ticket}
+                            drawnNumbers={drawnNumbers}
+                            playerName={player.name}
+                            compact
+                          />
                         </div>
-                      );
+                      ));
                     })}
                   </div>
                 </div>
