@@ -29,32 +29,41 @@ export function AdminPanel({
   const [editName, setEditName] = useState('');
   const [newGameTime, setNewGameTime] = useState(gameTime);
   const [loading, setLoading] = useState<string | null>(null);
-  const [ticketCount, setTicketCount] = useState(1);
 
   const addPlayer = async () => {
     if (!newPlayerName.trim()) return;
     setLoading('addPlayer');
     const order = players.length;
-    const { data: playerData, error } = await supabase
+    await supabase
       .from('players')
-      .insert({ name: newPlayerName.trim(), display_order: order })
-      .select()
-      .single();
+      .insert({ name: newPlayerName.trim(), display_order: order, is_booked: false });
+    setNewPlayerName('');
+    onRefetch();
+    setLoading(null);
+  };
 
-    if (!error && playerData) {
-      // Generate tickets for the player
-      for (let i = 1; i <= ticketCount; i++) {
-        const ticketGrid = generateSimpleTicket();
-        await supabase.from('tickets').insert({
-          player_id: playerData.id,
-          ticket_number: i,
-          numbers: ticketGrid as unknown as never,
-        });
-      }
-      setNewPlayerName('');
-      setTicketCount(1);
-      onRefetch();
+  const toggleBooking = async (player: Player) => {
+    const newBooked = !player.is_booked;
+    setLoading('book-' + player.id);
+
+    if (newBooked) {
+      // Generate 1 ticket
+      const ticketGrid = generateSimpleTicket();
+      await supabase.from('tickets').insert({
+        player_id: player.id,
+        ticket_number: 1,
+        numbers: ticketGrid as unknown as never,
+      });
+      // Open WhatsApp notification
+      const msg = encodeURIComponent(`Hi ${player.name}, your ticket for ASSAM TAMBOLA has been booked! 🎫`);
+      window.open(`https://wa.me/918638979028?text=${msg}`, '_blank');
+    } else {
+      // Remove tickets
+      await supabase.from('tickets').delete().eq('player_id', player.id);
     }
+
+    await supabase.from('players').update({ is_booked: newBooked }).eq('id', player.id);
+    onRefetch();
     setLoading(null);
   };
 
@@ -256,15 +265,6 @@ export function AdminPanel({
                 onKeyDown={e => e.key === 'Enter' && addPlayer()}
                 className="bg-input border-border text-foreground flex-1 min-w-[150px]"
               />
-              <select
-                value={ticketCount}
-                onChange={e => setTicketCount(Number(e.target.value))}
-                className="bg-input border border-border text-foreground rounded-md px-3 text-sm"
-              >
-                <option value={1}>1 Ticket</option>
-                <option value={2}>2 Tickets</option>
-                <option value={3}>3 Tickets</option>
-              </select>
               <Button
                 onClick={addPlayer}
                 disabled={loading === 'addPlayer' || !newPlayerName.trim() || players.length >= 250}
@@ -285,7 +285,6 @@ export function AdminPanel({
                 </div>
               ) : (
                 players.map((player, idx) => {
-                  const playerTickets = tickets.filter(t => t.player_id === player.id);
                   return (
                     <div key={player.id} className="flex items-center gap-3 bg-muted/30 rounded-lg px-3 py-2 border border-border/50 animate-slide-up">
                       <span className="text-gold font-bold text-sm w-6 text-right shrink-0">{idx + 1}.</span>
@@ -303,7 +302,19 @@ export function AdminPanel({
                       ) : (
                         <span className="text-foreground text-sm flex-1">{player.name}</span>
                       )}
-                      <span className="text-muted-foreground text-xs shrink-0">{playerTickets.length}T</span>
+                      <Button
+                        size="sm"
+                        onClick={() => toggleBooking(player)}
+                        disabled={loading === 'book-' + player.id}
+                        className={`shrink-0 text-xs px-2 py-1 rounded-full font-semibold ${
+                          player.is_booked
+                            ? 'bg-green-900/50 text-green-400 border border-green-700'
+                            : 'bg-destructive/20 text-destructive border border-destructive/50'
+                        }`}
+                        variant="ghost"
+                      >
+                        {loading === 'book-' + player.id ? <Loader2 className="w-3 h-3 animate-spin" /> : player.is_booked ? '✅ BOOKED' : '❌ NOT BOOKED'}
+                      </Button>
                       <div className="flex gap-1 shrink-0">
                         {editingPlayer === player.id ? (
                           <>
