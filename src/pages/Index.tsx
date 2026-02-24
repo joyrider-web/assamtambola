@@ -65,9 +65,9 @@ export default function Index() {
       <header className="relative overflow-hidden">
         <div className="gradient-hero py-8 md:py-12 px-4 text-center">
           {/* Decorative top */}
-          <div className="absolute inset-0 opacity-15"
+          <div className="absolute inset-0 opacity-10"
             style={{
-              backgroundImage: 'radial-gradient(circle at 20% 50%, hsl(45 100% 50%) 0%, transparent 60%), radial-gradient(circle at 80% 50%, hsl(280 70% 60%) 0%, transparent 60%)'
+              backgroundImage: 'radial-gradient(circle at 20% 50%, hsl(42 85% 55%) 0%, transparent 60%), radial-gradient(circle at 80% 50%, hsl(0 75% 50%) 0%, transparent 60%)'
             }}
           />
 
@@ -190,24 +190,43 @@ export default function Index() {
                 </div>
               ) : (
                 <div>
-                  <div className="text-center mb-5">
-                    <h2 className="font-display text-2xl text-secondary uppercase tracking-wider">Ticket For Coming Game</h2>
-                    <div className="decorative-line w-40 mx-auto mt-2" />
+                  <div className="flex items-center gap-3 mb-5">
+                    <h2 className="font-display text-2xl text-gold">Players & Tickets</h2>
+                    <div className="decorative-line flex-1" />
+                    <span className="text-muted-foreground text-sm">{players.length} players</span>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {players.map((player) => {
+                    {players.map((player, idx) => {
                       const playerTickets = tickets.filter(t => t.player_id === player.id);
-                      return playerTickets.map(ticket => (
-                        <div key={ticket.id} className="animate-slide-up">
-                          <TambolaTicket
-                            ticket={ticket}
-                            drawnNumbers={drawnNumbers}
-                            playerName={player.name}
-                            compact
-                          />
+                      return (
+                        <div key={player.id} className="gradient-card border gold-border rounded-xl p-4 shadow-card animate-slide-up">
+                          <div className="flex items-center gap-2 mb-3">
+                            <span className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0"
+                              style={{ background: 'var(--gradient-gold)', color: 'hsl(20 40% 10%)' }}>
+                              {idx + 1}
+                            </span>
+                            <h3 className="font-body font-semibold text-foreground truncate">{player.name}</h3>
+                            <span className="text-muted-foreground text-xs shrink-0 ml-auto">
+                              {playerTickets.length} ticket{playerTickets.length !== 1 ? 's' : ''}
+                            </span>
+                          </div>
+                          <div className="space-y-2">
+                            {playerTickets.map(ticket => (
+                              <TambolaTicket
+                                key={ticket.id}
+                                ticket={ticket}
+                                drawnNumbers={drawnNumbers}
+                                playerName={player.name}
+                                compact
+                              />
+                            ))}
+                            {playerTickets.length === 0 && (
+                              <p className="text-muted-foreground text-xs text-center py-2">No ticket assigned</p>
+                            )}
+                          </div>
                         </div>
-                      ));
+                      );
                     })}
                   </div>
                 </div>

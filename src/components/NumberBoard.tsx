@@ -17,8 +17,8 @@ export function NumberBoard({ drawnNumbers, currentNumber }: NumberBoardProps) {
   ];
 
   return (
-    <div className="rounded-xl border-2 p-4 shadow-card" style={{ background: 'hsl(220 30% 15%)', borderColor: 'hsl(var(--gold))' }}>
-      <h3 className="font-display text-secondary text-lg mb-3 text-center">Number Board</h3>
+    <div className="gradient-card rounded-xl border gold-border p-4 shadow-card">
+      <h3 className="font-display text-gold text-lg mb-3 text-center">Number Board</h3>
       <div className="space-y-1">
         {rows.map((row, ri) => (
           <div key={ri} className="grid grid-cols-10 gap-1">

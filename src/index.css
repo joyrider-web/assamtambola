@@ -6,67 +6,67 @@
 
 @layer base {
   :root {
-    /* Core palette - vibrant pink/magenta theme */
-    --background: 340 85% 55%;
-    --foreground: 0 0% 100%;
+    /* Core palette - deep festive Indian aesthetic */
+    --background: 20 15% 6%;
+    --foreground: 45 80% 92%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 220 20% 20%;
+    --card: 20 20% 10%;
+    --card-foreground: 45 80% 92%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 20% 20%;
+    --popover: 20 20% 10%;
+    --popover-foreground: 45 80% 92%;
 
-    /* Blue primary */
-    --primary: 225 70% 50%;
-    --primary-foreground: 0 0% 100%;
+    /* Crimson red primary */
+    --primary: 0 75% 50%;
+    --primary-foreground: 45 80% 96%;
 
-    /* Yellow/gold secondary */
-    --secondary: 45 100% 50%;
-    --secondary-foreground: 220 20% 15%;
+    /* Gold secondary */
+    --secondary: 42 85% 55%;
+    --secondary-foreground: 20 40% 10%;
 
-    --muted: 340 60% 45%;
-    --muted-foreground: 0 0% 90%;
+    --muted: 20 15% 16%;
+    --muted-foreground: 45 30% 60%;
 
-    --accent: 280 70% 55%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 42 85% 55%;
+    --accent-foreground: 20 40% 10%;
 
-    --destructive: 0 80% 55%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive: 0 75% 50%;
+    --destructive-foreground: 45 80% 96%;
 
-    --border: 45 100% 50%;
-    --input: 340 70% 48%;
-    --ring: 45 100% 50%;
+    --border: 42 40% 25%;
+    --input: 20 20% 14%;
+    --ring: 42 85% 55%;
 
     --radius: 0.75rem;
 
     /* Custom tokens */
-    --gold: 45 100% 50%;
-    --crimson: 340 85% 55%;
-    --deep-bg: 340 85% 50%;
-    --ticket-bg: 0 0% 100%;
-    --number-called: 120 60% 45%;
-    --number-uncalled: 0 0% 95%;
+    --gold: 42 85% 55%;
+    --crimson: 0 75% 50%;
+    --deep-bg: 20 15% 4%;
+    --ticket-bg: 25 30% 14%;
+    --number-called: 42 85% 55%;
+    --number-uncalled: 20 15% 22%;
 
     /* Gradients */
-    --gradient-hero: linear-gradient(135deg, hsl(340 85% 55%) 0%, hsl(280 70% 55%) 40%, hsl(225 70% 55%) 100%);
-    --gradient-gold: linear-gradient(135deg, hsl(45 100% 45%), hsl(45 100% 55%), hsl(45 100% 45%));
-    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(0 0% 97%));
-    --gradient-ticket: linear-gradient(145deg, hsl(0 0% 100%), hsl(0 0% 98%));
-    --gradient-number-called: linear-gradient(135deg, hsl(120 60% 40%), hsl(120 60% 50%));
+    --gradient-hero: linear-gradient(135deg, hsl(0 75% 40%) 0%, hsl(20 15% 6%) 50%, hsl(42 70% 25%) 100%);
+    --gradient-gold: linear-gradient(135deg, hsl(42 85% 45%), hsl(45 90% 65%), hsl(42 85% 45%));
+    --gradient-card: linear-gradient(145deg, hsl(20 25% 12%), hsl(20 15% 8%));
+    --gradient-ticket: linear-gradient(145deg, hsl(25 35% 16%), hsl(20 20% 10%));
+    --gradient-number-called: linear-gradient(135deg, hsl(42 85% 50%), hsl(38 90% 60%));
 
     /* Shadows */
-    --shadow-gold: 0 0 20px hsl(45 100% 50% / 0.4);
-    --shadow-crimson: 0 0 30px hsl(340 85% 55% / 0.4);
-    --shadow-card: 0 4px 16px hsl(0 0% 0% / 0.15);
+    --shadow-gold: 0 0 20px hsl(42 85% 55% / 0.3);
+    --shadow-crimson: 0 0 30px hsl(0 75% 50% / 0.3);
+    --shadow-card: 0 8px 32px hsl(20 15% 2% / 0.6);
 
-    --sidebar-background: 340 85% 50%;
-    --sidebar-foreground: 0 0% 100%;
-    --sidebar-primary: 45 100% 50%;
-    --sidebar-primary-foreground: 220 20% 15%;
-    --sidebar-accent: 340 70% 45%;
-    --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 45 100% 50%;
-    --sidebar-ring: 45 100% 50%;
+    --sidebar-background: 20 20% 8%;
+    --sidebar-foreground: 45 80% 92%;
+    --sidebar-primary: 42 85% 55%;
+    --sidebar-primary-foreground: 20 40% 10%;
+    --sidebar-accent: 20 20% 14%;
+    --sidebar-accent-foreground: 45 80% 92%;
+    --sidebar-border: 42 40% 20%;
+    --sidebar-ring: 42 85% 55%;
   }
 }
 
@@ -153,25 +153,25 @@
 
   .number-called {
     background: var(--gradient-number-called);
-    color: hsl(0 0% 100%);
-    box-shadow: 0 0 10px hsl(120 60% 45% / 0.5);
+    color: hsl(var(--deep-bg));
+    box-shadow: 0 0 10px hsl(42 85% 55% / 0.5);
     transform: scale(1.05);
   }
 
   .number-uncalled {
     background: hsl(var(--number-uncalled));
-    color: hsl(220 20% 30%);
+    color: hsl(var(--foreground) / 0.6);
   }
 
   .number-marked {
-    background: hsl(0 80% 55%);
+    background: hsl(0 75% 50%);
     color: white;
-    box-shadow: 0 0 8px hsl(0 80% 55% / 0.6);
+    box-shadow: 0 0 8px hsl(0 75% 50% / 0.6);
   }
 
   .tambola-ticket {
-    background: hsl(0 0% 100%);
-    border: 3px solid hsl(var(--gold));
+    background: var(--gradient-ticket);
+    border: 1px solid hsl(var(--gold) / 0.25);
     border-radius: var(--radius);
     box-shadow: var(--shadow-card);
   }
@@ -181,7 +181,7 @@
   }
 
   .glow-text {
-    text-shadow: 0 0 20px hsl(0 0% 100% / 0.6);
+    text-shadow: 0 0 20px hsl(42 85% 55% / 0.6);
   }
 
   .animate-pulse-gold {
