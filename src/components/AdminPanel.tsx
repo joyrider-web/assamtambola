@@ -97,14 +97,23 @@ export function AdminPanel({
     setLoading(null);
   };
 
-  const drawNumber = async () => {
+  const [customNumber, setCustomNumber] = useState('');
+
+  const drawNumber = async (custom?: number) => {
     if (!session) return;
     setLoading('draw');
-    const remaining = Array.from({ length: 90 }, (_, i) => i + 1).filter(n => !drawnNumbers.includes(n));
-    if (remaining.length === 0) return;
-    const num = remaining[Math.floor(Math.random() * remaining.length)];
+    let num: number;
+    if (custom) {
+      if (drawnNumbers.includes(custom)) { setLoading(null); return; }
+      num = custom;
+    } else {
+      const remaining = Array.from({ length: 90 }, (_, i) => i + 1).filter(n => !drawnNumbers.includes(n));
+      if (remaining.length === 0) { setLoading(null); return; }
+      num = remaining[Math.floor(Math.random() * remaining.length)];
+    }
     await supabase.from('drawn_numbers').insert({ session_id: session.id, number: num });
     await supabase.from('game_sessions').update({ current_number: num }).eq('id', session.id);
+    setCustomNumber('');
     onRefetch();
     setLoading(null);
   };
@@ -216,14 +225,39 @@ export function AdminPanel({
                 {isActive && (
                   <>
                     <Button
-                      onClick={drawNumber}
+                      onClick={() => drawNumber()}
                       disabled={loading === 'draw' || drawnNumbers.length >= 90}
                       className="w-full gap-2 py-5 text-base font-bold"
                       style={{ background: 'hsl(var(--crimson))', color: 'white' }}
                     >
                       {loading === 'draw' ? <Loader2 className="w-4 h-4 animate-spin" /> : <ChevronDown className="w-4 h-4" />}
-                      Draw Next Number
+                      Draw Random
                     </Button>
+                    <div className="flex gap-2">
+                      <Input
+                        type="number"
+                        min={1}
+                        max={90}
+                        placeholder="1-90"
+                        value={customNumber}
+                        onChange={e => setCustomNumber(e.target.value)}
+                        onKeyDown={e => {
+                          if (e.key === 'Enter') {
+                            const n = Number(customNumber);
+                            if (n >= 1 && n <= 90) drawNumber(n);
+                          }
+                        }}
+                        className="bg-input border-border text-foreground flex-1"
+                      />
+                      <Button
+                        onClick={() => { const n = Number(customNumber); if (n >= 1 && n <= 90) drawNumber(n); }}
+                        disabled={loading === 'draw' || !customNumber || Number(customNumber) < 1 || Number(customNumber) > 90 || drawnNumbers.includes(Number(customNumber))}
+                        className="gap-1 font-semibold"
+                        style={{ background: 'var(--gradient-gold)', color: 'hsl(20 40% 10%)' }}
+                      >
+                        Draw #{customNumber || '?'}
+                      </Button>
+                    </div>
                     <div className="flex gap-2">
                       <Button onClick={resetGame} variant="outline" className="flex-1 gap-1 border-border text-muted-foreground text-xs">
                         <RotateCcw className="w-3 h-3" /> Reset
