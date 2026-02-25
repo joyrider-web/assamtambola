@@ -14,7 +14,7 @@ export function TambolaTicket({ ticket, drawnNumbers, playerName, compact = fals
     <div className={`tambola-ticket p-3 ${compact ? 'text-xs' : ''}`}>
       <div className="flex items-center justify-between mb-2">
         <span className="text-gold font-body font-semibold text-xs truncate max-w-[120px]">{playerName}</span>
-        <span className="text-muted-foreground text-xs font-body">T{ticket.ticket_number}</span>
+        <span className="text-muted-foreground text-xs">T{ticket.ticket_number}</span>
       </div>
       <div className="space-y-1">
         {grid.map((row, ri) => (
@@ -25,7 +25,7 @@ export function TambolaTicket({ ticket, drawnNumbers, playerName, compact = fals
                   <div
                     key={ci}
                     className="number-cell"
-                    style={{ background: 'hsl(230 25% 8%)' }}
+                    style={{ background: 'hsl(20 15% 8%)' }}
                   />
                 );
               }

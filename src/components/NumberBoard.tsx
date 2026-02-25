@@ -17,7 +17,8 @@ export function NumberBoard({ drawnNumbers, currentNumber }: NumberBoardProps) {
   ];
 
   return (
-    <div className="gradient-card rounded-xl gold-border p-3 shadow-card">
+    <div className="gradient-card rounded-xl border gold-border p-4 shadow-card">
+      <h3 className="font-display text-gold text-lg mb-3 text-center">Number Board</h3>
       <div className="space-y-1">
         {rows.map((row, ri) => (
           <div key={ri} className="grid grid-cols-10 gap-1">
@@ -39,7 +40,7 @@ export function NumberBoard({ drawnNumbers, currentNumber }: NumberBoardProps) {
           </div>
         ))}
       </div>
-      <div className="mt-2 flex items-center gap-3 justify-center text-xs text-muted-foreground font-body">
+      <div className="mt-3 flex items-center gap-2 justify-center text-xs text-muted-foreground">
         <span className="flex items-center gap-1">
           <span className="w-3 h-3 rounded" style={{ background: 'var(--gradient-number-called)' }} />
           Called ({drawnNumbers.length})
@@ -49,6 +50,14 @@ export function NumberBoard({ drawnNumbers, currentNumber }: NumberBoardProps) {
           Remaining ({90 - drawnNumbers.length})
         </span>
       </div>
+      <a
+        href="https://wa.me/918638979028?text=I%20want%20to%20buy%20tickets"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-4 w-full inline-flex items-center justify-center rounded-lg px-4 py-3 font-body font-bold text-sm tracking-wide transition-all bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-crimson"
+      >
+        BOOK NOW
+      </a>
     </div>
   );
 }
