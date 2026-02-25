@@ -100,6 +100,7 @@ export type Database = {
           display_order: number
           id: string
           is_active: boolean
+          is_booked: boolean
           name: string
           updated_at: string
         }
@@ -108,6 +109,7 @@ export type Database = {
           display_order?: number
           id?: string
           is_active?: boolean
+          is_booked?: boolean
           name: string
           updated_at?: string
         }
@@ -116,6 +118,7 @@ export type Database = {
           display_order?: number
           id?: string
           is_active?: boolean
+          is_booked?: boolean
           name?: string
           updated_at?: string
         }
