@@ -7,8 +7,8 @@
 @layer base {
   :root {
     /* Core palette - deep festive Indian aesthetic */
-    --background: 0 0% 100%;
-    --foreground: 20 15% 10%;
+    --background: 20 15% 6%;
+    --foreground: 45 80% 92%;
 
     --card: 20 20% 10%;
     --card-foreground: 45 80% 92%;
@@ -42,7 +42,7 @@
     /* Custom tokens */
     --gold: 42 85% 55%;
     --crimson: 0 75% 50%;
-    --deep-bg: 0 0% 100%;
+    --deep-bg: 20 15% 4%;
     --ticket-bg: 25 30% 14%;
     --number-called: 42 85% 55%;
     --number-uncalled: 20 15% 22%;
