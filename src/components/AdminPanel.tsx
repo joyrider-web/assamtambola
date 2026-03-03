@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Player, Ticket, GameSession } from '@/hooks/useGameStore';
+import { Winner } from '@/hooks/useWinnerDetection';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { generateSimpleTicket } from '@/lib/supabase-helpers';
+import { WinnerPanel } from '@/components/WinnerPanel';
+import { announceNumber, announceGameStart, announceGameOver } from '@/hooks/useVoiceAnnouncer';
 import {
   Users, Clock, Play, Square, Plus, Edit2, Trash2,
   RotateCcw, ChevronDown, Hash, LogOut, Loader2, Check, X
@@ -16,13 +19,14 @@ interface AdminPanelProps {
   tickets: Ticket[];
   session: GameSession | null;
   drawnNumbers: number[];
+  winners: Winner[];
   gameTime: string;
   onLogout: () => void;
   onRefetch: () => void;
 }
 
 export function AdminPanel({
-  players, tickets, session, drawnNumbers, gameTime, onLogout, onRefetch
+  players, tickets, session, drawnNumbers, winners, gameTime, onLogout, onRefetch
 }: AdminPanelProps) {
   const [newPlayerName, setNewPlayerName] = useState('');
   const [editingPlayer, setEditingPlayer] = useState<string | null>(null);
@@ -93,6 +97,7 @@ export function AdminPanel({
         status: 'active',
       });
     }
+    announceGameStart();
     onRefetch();
     setLoading(null);
   };
@@ -114,6 +119,8 @@ export function AdminPanel({
     await supabase.from('drawn_numbers').insert({ session_id: session.id, number: num });
     await supabase.from('game_sessions').update({ current_number: num }).eq('id', session.id);
     setCustomNumber('');
+    // Announce the number with voice
+    setTimeout(() => announceNumber(num), 300);
     onRefetch();
     setLoading(null);
   };
@@ -122,6 +129,7 @@ export function AdminPanel({
     if (!session) return;
     setLoading('end');
     await supabase.from('game_sessions').update({ status: 'completed' }).eq('id', session.id);
+    announceGameOver();
     onRefetch();
     setLoading(null);
   };
@@ -271,6 +279,18 @@ export function AdminPanel({
               </div>
             </div>
           </div>
+          {/* Winner Detection */}
+          {isActive && session && (
+            <WinnerPanel
+              sessionId={session.id}
+              players={players}
+              tickets={tickets}
+              drawnNumbers={drawnNumbers}
+              winners={winners}
+              onRefetch={onRefetch}
+              isAdmin
+            />
+          )}
         </div>
 
         {/* Player Management */}

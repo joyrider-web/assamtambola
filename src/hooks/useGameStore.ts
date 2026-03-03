@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { Winner } from '@/hooks/useWinnerDetection';
 
 export interface Player {
   id: string;
@@ -29,8 +30,12 @@ export function useGameStore() {
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [session, setSession] = useState<GameSession | null>(null);
   const [drawnNumbers, setDrawnNumbers] = useState<number[]>([]);
+  const [winners, setWinners] = useState<Winner[]>([]);
   const [gameTime, setGameTime] = useState('21:30');
   const [loading, setLoading] = useState(true);
+  const prevSessionStatus = useRef<string | null>(null);
+  const prevDrawnCount = useRef<number>(0);
+  const prevWinnerCount = useRef<number>(0);
 
   const fetchAll = async () => {
     const [playersRes, ticketsRes, sessionRes, settingsRes] = await Promise.all([
@@ -49,13 +54,13 @@ export function useGameStore() {
     }
     if (sessionRes.data) {
       setSession(sessionRes.data as GameSession);
-      // Fetch drawn numbers for current session
-      const drawnRes = await supabase
-        .from('drawn_numbers')
-        .select('number')
-        .eq('session_id', sessionRes.data.id)
-        .order('drawn_at');
+      // Fetch drawn numbers and winners for current session
+      const [drawnRes, winnersRes] = await Promise.all([
+        supabase.from('drawn_numbers').select('number').eq('session_id', sessionRes.data.id).order('drawn_at'),
+        supabase.from('winners').select('*').eq('session_id', sessionRes.data.id).order('created_at'),
+      ]);
       if (drawnRes.data) setDrawnNumbers(drawnRes.data.map(d => d.number));
+      if (winnersRes.data) setWinners(winnersRes.data as Winner[]);
     }
     if (settingsRes.data) setGameTime(settingsRes.data.value);
     setLoading(false);
@@ -64,7 +69,6 @@ export function useGameStore() {
   useEffect(() => {
     fetchAll();
 
-    // Realtime subscriptions
     const channel = supabase
       .channel('game-updates')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'players' }, () => fetchAll())
@@ -72,11 +76,11 @@ export function useGameStore() {
       .on('postgres_changes', { event: '*', schema: 'public', table: 'game_sessions' }, () => fetchAll())
       .on('postgres_changes', { event: '*', schema: 'public', table: 'drawn_numbers' }, () => fetchAll())
       .on('postgres_changes', { event: '*', schema: 'public', table: 'admin_settings' }, () => fetchAll())
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'winners' }, () => fetchAll())
       .subscribe((status) => {
         console.log('Realtime subscription status:', status);
       });
 
-    // Fallback polling every 5 seconds in case realtime misses events
     const pollInterval = setInterval(() => {
       fetchAll();
     }, 5000);
@@ -87,5 +91,5 @@ export function useGameStore() {
     };
   }, []);
 
-  return { players, tickets, session, drawnNumbers, gameTime, loading, refetch: fetchAll };
+  return { players, tickets, session, drawnNumbers, winners, gameTime, loading, refetch: fetchAll, prevSessionStatus, prevDrawnCount, prevWinnerCount };
 }
