@@ -5,12 +5,14 @@ import { TambolaTicket } from '@/components/TambolaTicket';
 import { NumberBoard } from '@/components/NumberBoard';
 import { AdminLogin } from '@/components/AdminLogin';
 import { AdminPanel } from '@/components/AdminPanel';
+import { WinnerPanel } from '@/components/WinnerPanel';
 import { formatTime } from '@/lib/supabase-helpers';
+import { announceNumber, announceGameStart, announceGameOver, announceWinner } from '@/hooks/useVoiceAnnouncer';
 import { Users, Clock, Trophy, Menu, X, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export default function Index() {
-  const { players, tickets, session, drawnNumbers, gameTime, loading, refetch } = useGameStore();
+  const { players, tickets, session, drawnNumbers, winners, gameTime, loading, refetch, prevSessionStatus, prevDrawnCount, prevWinnerCount } = useGameStore();
   const [isAdmin, setIsAdmin] = useState(false);
   const [showAdminLogin, setShowAdminLogin] = useState(false);
   const [showAdminPanel, setShowAdminPanel] = useState(false);
@@ -24,6 +26,43 @@ export default function Index() {
       setIsAdmin(!!session);
     });
   }, []);
+
+  // Voice announcements for public page (non-admin players)
+  useEffect(() => {
+    if (!session) return;
+    
+    // Announce game start
+    if (session.status === 'active' && prevSessionStatus.current !== 'active' && prevSessionStatus.current !== null) {
+      announceGameStart();
+    }
+    // Announce game over
+    if (session.status === 'completed' && prevSessionStatus.current === 'active') {
+      announceGameOver();
+    }
+    prevSessionStatus.current = session.status;
+  }, [session?.status]);
+
+  // Announce new drawn numbers
+  useEffect(() => {
+    if (drawnNumbers.length > prevDrawnCount.current && prevDrawnCount.current > 0) {
+      const latestNum = drawnNumbers[drawnNumbers.length - 1];
+      announceNumber(latestNum);
+    }
+    prevDrawnCount.current = drawnNumbers.length;
+  }, [drawnNumbers.length]);
+
+  // Announce new confirmed winners
+  useEffect(() => {
+    const confirmed = winners.filter(w => w.confirmed);
+    if (confirmed.length > prevWinnerCount.current && prevWinnerCount.current > 0) {
+      const latest = confirmed[confirmed.length - 1];
+      const player = players.find(p => p.id === latest.player_id);
+      if (player) {
+        setTimeout(() => announceWinner(player.name, latest.prize_type), 1000);
+      }
+    }
+    prevWinnerCount.current = confirmed.length;
+  }, [winners]);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -50,6 +89,7 @@ export default function Index() {
         tickets={tickets}
         session={session}
         drawnNumbers={drawnNumbers}
+        winners={winners}
         gameTime={gameTime}
         onLogout={handleLogout}
         onRefetch={refetch}
@@ -136,6 +176,20 @@ export default function Index() {
                 <p className="text-muted-foreground text-xs mt-1">{drawnNumbers.length} numbers drawn</p>
               </div>
             </div>
+          </div>
+        )}
+
+        {/* Winners Display */}
+        {session && winners.filter(w => w.confirmed).length > 0 && (
+          <div className="mb-6 max-w-md mx-auto">
+            <WinnerPanel
+              sessionId={session.id}
+              players={players}
+              tickets={tickets}
+              drawnNumbers={drawnNumbers}
+              winners={winners}
+              onRefetch={refetch}
+            />
           </div>
         )}
 

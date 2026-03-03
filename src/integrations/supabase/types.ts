@@ -156,6 +156,58 @@ export type Database = {
           },
         ]
       }
+      winners: {
+        Row: {
+          confirmed: boolean
+          created_at: string
+          id: string
+          player_id: string
+          prize_type: string
+          session_id: string
+          ticket_id: string
+        }
+        Insert: {
+          confirmed?: boolean
+          created_at?: string
+          id?: string
+          player_id: string
+          prize_type: string
+          session_id: string
+          ticket_id: string
+        }
+        Update: {
+          confirmed?: boolean
+          created_at?: string
+          id?: string
+          player_id?: string
+          prize_type?: string
+          session_id?: string
+          ticket_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "winners_player_id_fkey"
+            columns: ["player_id"]
+            isOneToOne: false
+            referencedRelation: "players"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "winners_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "game_sessions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "winners_ticket_id_fkey"
+            columns: ["ticket_id"]
+            isOneToOne: false
+            referencedRelation: "tickets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
