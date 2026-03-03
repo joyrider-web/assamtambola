@@ -66,14 +66,24 @@ export function useGameStore() {
     // Realtime subscriptions
     const channel = supabase
       .channel('game-updates')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'players' }, fetchAll)
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'tickets' }, fetchAll)
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'game_sessions' }, fetchAll)
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'drawn_numbers' }, fetchAll)
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'admin_settings' }, fetchAll)
-      .subscribe();
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'players' }, () => fetchAll())
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'tickets' }, () => fetchAll())
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'game_sessions' }, () => fetchAll())
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'drawn_numbers' }, () => fetchAll())
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'admin_settings' }, () => fetchAll())
+      .subscribe((status) => {
+        console.log('Realtime subscription status:', status);
+      });
 
-    return () => { supabase.removeChannel(channel); };
+    // Fallback polling every 5 seconds in case realtime misses events
+    const pollInterval = setInterval(() => {
+      fetchAll();
+    }, 5000);
+
+    return () => {
+      supabase.removeChannel(channel);
+      clearInterval(pollInterval);
+    };
   }, []);
 
   return { players, tickets, session, drawnNumbers, gameTime, loading, refetch: fetchAll };

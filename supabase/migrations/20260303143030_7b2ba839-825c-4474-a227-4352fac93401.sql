@@ -1,0 +1,2 @@
+ALTER TABLE public.drawn_numbers REPLICA IDENTITY FULL;
+ALTER TABLE public.game_sessions REPLICA IDENTITY FULL;
