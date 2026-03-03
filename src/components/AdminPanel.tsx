@@ -29,7 +29,7 @@ export function AdminPanel({
   const [editName, setEditName] = useState('');
   const [newGameTime, setNewGameTime] = useState(gameTime);
   const [loading, setLoading] = useState<string | null>(null);
-  const [ticketCount, setTicketCount] = useState(1);
+  const [ticketCount] = useState(1);
 
   const addPlayer = async () => {
     if (!newPlayerName.trim()) return;
@@ -52,7 +52,7 @@ export function AdminPanel({
         });
       }
       setNewPlayerName('');
-      setTicketCount(1);
+      onRefetch();
       onRefetch();
     }
     setLoading(null);
@@ -290,15 +290,6 @@ export function AdminPanel({
                 onKeyDown={e => e.key === 'Enter' && addPlayer()}
                 className="bg-input border-border text-foreground flex-1 min-w-[150px]"
               />
-              <select
-                value={ticketCount}
-                onChange={e => setTicketCount(Number(e.target.value))}
-                className="bg-input border border-border text-foreground rounded-md px-3 text-sm"
-              >
-                <option value={1}>1 Ticket</option>
-                <option value={2}>2 Tickets</option>
-                <option value={3}>3 Tickets</option>
-              </select>
               <Button
                 onClick={addPlayer}
                 disabled={loading === 'addPlayer' || !newPlayerName.trim() || players.length >= 250}
@@ -337,7 +328,22 @@ export function AdminPanel({
                       ) : (
                         <span className="text-foreground text-sm flex-1">{player.name}</span>
                       )}
-                      <span className="text-muted-foreground text-xs shrink-0">{playerTickets.length}T</span>
+                      <button
+                        onClick={async () => {
+                          setLoading('book-' + player.id);
+                          await supabase.from('players').update({ is_booked: !player.is_booked }).eq('id', player.id);
+                          onRefetch();
+                          setLoading(null);
+                        }}
+                        disabled={loading === 'book-' + player.id}
+                        className={`px-2.5 py-1 rounded-full text-xs font-bold shrink-0 transition-all ${
+                          player.is_booked
+                            ? 'bg-green-900/50 text-green-400 border border-green-700'
+                            : 'bg-yellow-900/50 text-yellow-400 border border-yellow-700 hover:bg-yellow-900/70'
+                        }`}
+                      >
+                        {loading === 'book-' + player.id ? '...' : player.is_booked ? '✅ BOOKED' : 'BOOK THIS'}
+                      </button>
                       <div className="flex gap-1 shrink-0">
                         {editingPlayer === player.id ? (
                           <>
