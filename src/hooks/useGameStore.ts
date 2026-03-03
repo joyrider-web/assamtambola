@@ -6,6 +6,7 @@ export interface Player {
   name: string;
   display_order: number;
   is_active: boolean;
+  is_booked: boolean;
 }
 
 export interface Ticket {
