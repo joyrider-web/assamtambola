@@ -207,8 +207,12 @@ export default function Index() {
                               {idx + 1}
                             </span>
                             <h3 className="font-body font-semibold text-foreground truncate">{player.name}</h3>
-                            <span className="text-muted-foreground text-xs shrink-0 ml-auto">
-                              {playerTickets.length} ticket{playerTickets.length !== 1 ? 's' : ''}
+                            <span className={`px-2 py-0.5 rounded-full text-xs font-bold shrink-0 ml-auto ${
+                              player.is_booked
+                                ? 'bg-green-900/50 text-green-400 border border-green-700'
+                                : 'bg-yellow-900/50 text-yellow-400 border border-yellow-700'
+                            }`}>
+                              {player.is_booked ? '✅ BOOKED' : 'BOOK THIS'}
                             </span>
                           </div>
                           <div className="space-y-2">
