@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import bannerImg from '@/assets/banner.png';
 import { supabase } from '@/integrations/supabase/client';
 import { useGameStore } from '@/hooks/useGameStore';
 import { TambolaTicket } from '@/components/TambolaTicket';
@@ -104,47 +105,25 @@ export default function Index() {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Header */}
-      <header className="relative overflow-hidden">
-        <div className="gradient-hero py-8 md:py-12 px-4 text-center">
-          {/* Decorative top */}
-          <div className="absolute inset-0 opacity-10"
-            style={{
-              backgroundImage: 'radial-gradient(circle at 20% 50%, hsl(42 85% 55%) 0%, transparent 60%), radial-gradient(circle at 80% 50%, hsl(0 75% 50%) 0%, transparent 60%)'
-            }}
-          />
+      <header className="relative">
+        <img src={bannerImg} alt="Assam Tambola Banner" className="w-full h-auto object-cover rounded-b-xl" />
 
-          <div className="relative z-10">
-            <div className="flex items-center justify-center gap-3 mb-2">
-              <div className="decorative-line w-12 md:w-20" />
-              <span className="text-gold text-sm font-body tracking-widest uppercase">Est. Daily Game</span>
-              <div className="decorative-line w-12 md:w-20" />
+        {/* Status bar below banner */}
+        <div className="gradient-hero py-3 px-4">
+          <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8 text-sm">
+            <div className="flex items-center gap-2">
+              <Users className="w-4 h-4 text-gold" />
+              <span className="text-foreground/80">{players.length} Players</span>
             </div>
-
-            <h1 className="font-display text-4xl md:text-6xl lg:text-7xl text-foreground glow-text mb-1">
-              ASSAM
-            </h1>
-            <h2 className="font-display text-3xl md:text-5xl lg:text-6xl"
-              style={{ color: 'hsl(var(--gold))' }}>
-              TAMBOLA
-            </h2>
-
-            <div className="decorative-line w-40 md:w-60 mx-auto mt-4 mb-6" />
-
-            <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8 text-sm">
-              <div className="flex items-center gap-2">
-                <Users className="w-4 h-4 text-gold" />
-                <span className="text-foreground/80">{players.length} Players</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4 text-gold" />
-                <span className="text-foreground/80">Daily at {formatTime(gameTime)}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Trophy className="w-4 h-4 text-gold" />
-                <span className={isGameActive ? 'text-green-400 font-semibold' : 'text-foreground/80'}>
-                  {isGameActive ? '🔴 LIVE NOW' : session?.status === 'completed' ? '✅ Completed' : '⏳ Upcoming'}
-                </span>
-              </div>
+            <div className="flex items-center gap-2">
+              <Clock className="w-4 h-4 text-gold" />
+              <span className="text-foreground/80">Daily at {formatTime(gameTime)}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Trophy className="w-4 h-4 text-gold" />
+              <span className={isGameActive ? 'text-green-400 font-semibold' : 'text-foreground/80'}>
+                {isGameActive ? '🔴 LIVE NOW' : session?.status === 'completed' ? '✅ Completed' : '⏳ Upcoming'}
+              </span>
             </div>
           </div>
         </div>
@@ -152,7 +131,7 @@ export default function Index() {
         {/* Admin button */}
         <button
           onClick={() => isAdmin ? setShowAdminPanel(true) : setShowAdminLogin(true)}
-          className="absolute top-4 right-4 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-body font-semibold transition-all"
+          className="absolute top-2 right-2 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-body font-semibold transition-all"
           style={{
             background: isAdmin ? 'hsl(var(--gold) / 0.15)' : 'hsl(var(--foreground) / 0.05)',
             border: '1px solid hsl(var(--gold) / 0.3)',
