@@ -204,7 +204,7 @@ export default function Index() {
             {/* Left: Number Board (sticky) */}
             <div className="xl:col-span-1">
               <div className="xl:sticky xl:top-4">
-                <NumberBoard drawnNumbers={drawnNumbers} currentNumber={session?.current_number} />
+                <NumberBoard drawnNumbers={drawnNumbers} currentNumber={session?.current_number} players={players} />
 
                 {/* Drawn history */}
                 {drawnNumbers.length > 0 && (
