@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useGameStore } from '@/hooks/useGameStore';
 import { TambolaTicket } from '@/components/TambolaTicket';
 import { NumberBoard } from '@/components/NumberBoard';
+import { BookingDashboard } from '@/components/BookingDashboard';
 import { AdminLogin } from '@/components/AdminLogin';
 import { AdminPanel } from '@/components/AdminPanel';
 import { WinnerPanel } from '@/components/WinnerPanel';
@@ -17,6 +18,7 @@ export default function Index() {
   const [showAdminLogin, setShowAdminLogin] = useState(false);
   const [showAdminPanel, setShowAdminPanel] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isBookingOpen, setIsBookingOpen] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -201,10 +203,23 @@ export default function Index() {
           </div>
         ) : (
           <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
-            {/* Left: Number Board (sticky) */}
+            {/* Left: Number Board (sticky, only when game active) + Booking Button */}
             <div className="xl:col-span-1">
               <div className="xl:sticky xl:top-4">
-                <NumberBoard drawnNumbers={drawnNumbers} currentNumber={session?.current_number} players={players} />
+                {isGameActive && (
+                  <NumberBoard drawnNumbers={drawnNumbers} currentNumber={session?.current_number} />
+                )}
+
+                {/* CHECK AVAILABLE TICKETS button - always visible */}
+                <button
+                  onClick={() => setIsBookingOpen(true)}
+                  className={`${isGameActive ? 'mt-4' : ''} w-full inline-flex items-center justify-center rounded-lg px-4 py-3 font-body font-bold text-sm tracking-wide transition-all bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-crimson`}
+                >
+                  CHECK AVAILABLE TICKETS
+                </button>
+                {isBookingOpen && (
+                  <BookingDashboard players={players} onClose={() => setIsBookingOpen(false)} />
+                )}
 
                 {/* Drawn history */}
                 {drawnNumbers.length > 0 && (

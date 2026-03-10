@@ -1,15 +1,9 @@
-import { useState } from 'react';
-import { Player } from '@/hooks/useGameStore';
-import { BookingDashboard } from './BookingDashboard';
-
 interface NumberBoardProps {
   drawnNumbers: number[];
   currentNumber?: number | null;
-  players: Player[];
 }
 
-export function NumberBoard({ drawnNumbers, currentNumber, players }: NumberBoardProps) {
-  const [isBookingOpen, setIsBookingOpen] = useState(false);
+export function NumberBoard({ drawnNumbers, currentNumber }: NumberBoardProps) {
   const rows = [
     [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
     [11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
@@ -56,15 +50,6 @@ export function NumberBoard({ drawnNumbers, currentNumber, players }: NumberBoar
           Remaining ({90 - drawnNumbers.length})
         </span>
       </div>
-      <button
-        onClick={() => setIsBookingOpen(true)}
-        className="mt-4 w-full inline-flex items-center justify-center rounded-lg px-4 py-3 font-body font-bold text-sm tracking-wide transition-all bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-crimson"
-      >
-        CHECK AVAILABLE TICKETS
-      </button>
-      {isBookingOpen && (
-        <BookingDashboard players={players} onClose={() => setIsBookingOpen(false)} />
-      )}
     </div>
   );
 }
