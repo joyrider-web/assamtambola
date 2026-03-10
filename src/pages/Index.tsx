@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import bannerImg from '@/assets/banner.png';
 import { supabase } from '@/integrations/supabase/client';
 import { useGameStore } from '@/hooks/useGameStore';
 import { TambolaTicket } from '@/components/TambolaTicket';
