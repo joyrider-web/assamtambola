@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useGameStore } from '@/hooks/useGameStore';
 import { TambolaTicket } from '@/components/TambolaTicket';
 import { NumberBoard } from '@/components/NumberBoard';
+import { BookingDashboard } from '@/components/BookingDashboard';
 import { AdminLogin } from '@/components/AdminLogin';
 import { AdminPanel } from '@/components/AdminPanel';
 import { WinnerPanel } from '@/components/WinnerPanel';
