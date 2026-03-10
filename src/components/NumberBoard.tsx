@@ -1,6 +1,11 @@
+import { useState } from 'react';
+import { Player } from '@/hooks/useGameStore';
+import { BookingDashboard } from './BookingDashboard';
+
 interface NumberBoardProps {
   drawnNumbers: number[];
   currentNumber?: number | null;
+  players: Player[];
 }
 
 export function NumberBoard({ drawnNumbers, currentNumber }: NumberBoardProps) {
