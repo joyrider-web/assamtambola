@@ -8,10 +8,11 @@ import { BookingDashboard } from '@/components/BookingDashboard';
 import { AdminLogin } from '@/components/AdminLogin';
 import { AdminPanel } from '@/components/AdminPanel';
 import { WinnerPanel } from '@/components/WinnerPanel';
+import { IconRow } from '@/components/IconRow';
+import { StatusBar } from '@/components/StatusBar';
 import { formatTime } from '@/lib/supabase-helpers';
 import { announceNumber, announceGameStart, announceGameOver, announceWinner } from '@/hooks/useVoiceAnnouncer';
-import { Users, Clock, Trophy, Menu, X, Shield } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Users, Shield } from 'lucide-react';
 
 export default function Index() {
   const { players, tickets, session, drawnNumbers, winners, gameTime, loading, refetch, prevSessionStatus, prevDrawnCount, prevWinnerCount } = useGameStore();
@@ -30,22 +31,18 @@ export default function Index() {
     });
   }, []);
 
-  // Voice announcements for public page (non-admin players)
+  // Voice announcements
   useEffect(() => {
     if (!session) return;
-    
-    // Announce game start
     if (session.status === 'active' && prevSessionStatus.current !== 'active' && prevSessionStatus.current !== null) {
       announceGameStart();
     }
-    // Announce game over
     if (session.status === 'completed' && prevSessionStatus.current === 'active') {
       announceGameOver();
     }
     prevSessionStatus.current = session.status;
   }, [session?.status]);
 
-  // Announce new drawn numbers
   useEffect(() => {
     if (drawnNumbers.length > prevDrawnCount.current && prevDrawnCount.current > 0) {
       const latestNum = drawnNumbers[drawnNumbers.length - 1];
@@ -54,7 +51,6 @@ export default function Index() {
     prevDrawnCount.current = drawnNumbers.length;
   }, [drawnNumbers.length]);
 
-  // Announce new confirmed winners
   useEffect(() => {
     const confirmed = winners.filter(w => w.confirmed);
     if (confirmed.length > prevWinnerCount.current && prevWinnerCount.current > 0) {
@@ -103,37 +99,17 @@ export default function Index() {
   const isGameActive = session?.status === 'active';
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Hero Header */}
+    <div className="min-h-screen" style={{ background: 'var(--gradient-bg)' }}>
+      {/* Header */}
       <header className="relative">
         <img src={bannerImg} alt="Assam Tambola Banner" className="w-full h-auto object-cover rounded-b-xl" />
-
-        {/* Status bar below banner */}
-        <div className="gradient-hero py-3 px-4">
-          <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8 text-sm">
-            <div className="flex items-center gap-2">
-              <Users className="w-4 h-4 text-gold" />
-              <span className="text-foreground/80">{players.length} Players</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Clock className="w-4 h-4 text-gold" />
-              <span className="text-foreground/80">Daily at {formatTime(gameTime)}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Trophy className="w-4 h-4 text-gold" />
-              <span className={isGameActive ? 'text-green-400 font-semibold' : 'text-foreground/80'}>
-                {isGameActive ? '🔴 LIVE NOW' : session?.status === 'completed' ? '✅ Completed' : '⏳ Upcoming'}
-              </span>
-            </div>
-          </div>
-        </div>
 
         {/* Admin button */}
         <button
           onClick={() => isAdmin ? setShowAdminPanel(true) : setShowAdminLogin(true)}
-          className="absolute top-2 right-2 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-body font-semibold transition-all"
+          className="absolute top-2 right-2 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-body font-semibold transition-all glow-interactive"
           style={{
-            background: isAdmin ? 'hsl(var(--gold) / 0.15)' : 'hsl(var(--foreground) / 0.05)',
+            background: isAdmin ? 'hsl(280 60% 50% / 0.2)' : 'hsl(0 0% 100% / 0.08)',
             border: '1px solid hsl(var(--gold) / 0.3)',
             color: 'hsl(var(--gold))',
           }}
@@ -143,8 +119,39 @@ export default function Index() {
         </button>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 py-6 md:py-8">
-        {/* Current Number Banner (when game active) */}
+      {/* Icon Row */}
+      <IconRow />
+
+      {/* Status Bar */}
+      <StatusBar gameTime={gameTime} sessionStatus={session?.status} />
+
+      {/* CHECK AVAILABLE TICKETS / GAME IS LIVE button */}
+      <div className="px-4 pb-4">
+        <button
+          onClick={() => !isGameActive && setIsBookingOpen(true)}
+          className={`w-full max-w-md mx-auto block rounded-xl px-4 py-3.5 font-body font-bold text-sm tracking-wider transition-all ${
+            isGameActive ? 'animate-pulse-live cursor-default' : 'glow-interactive cursor-pointer hover:scale-[1.02]'
+          }`}
+          style={{
+            background: isGameActive
+              ? 'linear-gradient(135deg, hsl(120 70% 35%), hsl(150 60% 40%))'
+              : 'var(--gradient-purple-btn)',
+            color: isGameActive ? 'hsl(0 0% 100%)' : 'hsl(330 80% 80%)',
+            boxShadow: isGameActive
+              ? '0 0 20px hsl(120 80% 40% / 0.4)'
+              : 'var(--shadow-purple-glow)',
+          }}
+        >
+          {isGameActive ? '🔴 GAME IS LIVE' : 'CHECK AVAILABLE TICKETS'}
+        </button>
+      </div>
+
+      {isBookingOpen && (
+        <BookingDashboard players={players} onClose={() => setIsBookingOpen(false)} />
+      )}
+
+      <main className="max-w-7xl mx-auto px-4 py-4 md:py-8">
+        {/* Current Number Banner */}
         {isGameActive && session?.current_number && (
           <div className="mb-8 text-center animate-bounce-in">
             <div className="inline-block">
@@ -182,22 +189,11 @@ export default function Index() {
           </div>
         ) : (
           <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
-            {/* Left: Number Board (sticky, only when game active) + Booking Button */}
+            {/* Left sidebar */}
             <div className="xl:col-span-1">
               <div className="xl:sticky xl:top-4">
                 {isGameActive && (
                   <NumberBoard drawnNumbers={drawnNumbers} currentNumber={session?.current_number} />
-                )}
-
-                {/* CHECK AVAILABLE TICKETS button - always visible */}
-                <button
-                  onClick={() => setIsBookingOpen(true)}
-                  className={`${isGameActive ? 'mt-4' : ''} w-full inline-flex items-center justify-center rounded-lg px-4 py-3 font-body font-bold text-sm tracking-wide transition-all bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-crimson`}
-                >
-                  CHECK AVAILABLE TICKETS
-                </button>
-                {isBookingOpen && (
-                  <BookingDashboard players={players} onClose={() => setIsBookingOpen(false)} />
                 )}
 
                 {/* Drawn history */}
@@ -220,7 +216,7 @@ export default function Index() {
               </div>
             </div>
 
-            {/* Right: All Players & Tickets */}
+            {/* Right: Players & Tickets */}
             <div className="xl:col-span-3">
               {players.length === 0 ? (
                 <div className="text-center py-20">
