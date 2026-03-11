@@ -240,39 +240,25 @@ export default function Index() {
                     <span className="text-muted-foreground text-sm">{players.length} players</span>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                     {players.map((player, idx) => {
                       const playerTickets = tickets.filter(t => t.player_id === player.id);
                       return (
-                        <div key={player.id} className="gradient-card border gold-border rounded-xl p-4 shadow-card animate-slide-up">
-                          <div className="flex items-center gap-2 mb-3">
-                            <span className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0"
-                              style={{ background: 'var(--gradient-gold)', color: 'hsl(20 40% 10%)' }}>
-                              {idx + 1}
-                            </span>
-                            <h3 className="font-body font-semibold text-foreground truncate">{player.name}</h3>
-                            <span className={`px-2 py-0.5 rounded-full text-xs font-bold shrink-0 ml-auto ${
-                              player.is_booked
-                                ? 'bg-green-900/50 text-green-400 border border-green-700'
-                                : 'bg-yellow-900/50 text-yellow-400 border border-yellow-700'
-                            }`}>
-                              {player.is_booked ? '✅ BOOKED' : 'BOOK THIS'}
-                            </span>
-                          </div>
-                          <div className="space-y-2">
-                            {playerTickets.map(ticket => (
-                              <TambolaTicket
-                                key={ticket.id}
-                                ticket={ticket}
-                                drawnNumbers={drawnNumbers}
-                                playerName={player.name}
-                                compact
-                              />
-                            ))}
-                            {playerTickets.length === 0 && (
-                              <p className="text-muted-foreground text-xs text-center py-2">No ticket assigned</p>
-                            )}
-                          </div>
+                        <div key={player.id} className="space-y-3 animate-slide-up">
+                          {playerTickets.map(ticket => (
+                            <TambolaTicket
+                              key={ticket.id}
+                              ticket={ticket}
+                              drawnNumbers={drawnNumbers}
+                              playerName={player.name}
+                              playerIndex={idx + 1}
+                              isBooked={player.is_booked}
+                              compact
+                            />
+                          ))}
+                          {playerTickets.length === 0 && (
+                            <p className="text-muted-foreground text-xs text-center py-2">No ticket assigned</p>
+                          )}
                         </div>
                       );
                     })}
