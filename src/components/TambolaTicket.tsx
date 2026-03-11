@@ -28,7 +28,7 @@ export function TambolaTicket({ ticket, drawnNumbers, playerName, playerIndex, i
           className="flex-1 py-2 px-3 text-sm font-bold text-white tracking-wide"
           style={{ background: 'hsl(120 40% 45%)' }}
         >
-          {isBooked ? 'BOOKED' : 'UNSOLD'}
+          {isBooked ? playerName : 'UNSOLD'}
         </div>
         {/* Book button */}
         <button
