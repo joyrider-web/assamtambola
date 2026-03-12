@@ -104,20 +104,6 @@ export default function Index() {
       {/* Header */}
       <header className="relative">
         <img src={bannerImg} alt="Assam Tambola Banner" className="w-full h-auto object-cover rounded-b-xl" />
-
-        {/* Admin button */}
-        <button
-          onClick={() => isAdmin ? setShowAdminPanel(true) : setShowAdminLogin(true)}
-          className="absolute top-2 right-2 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-body font-semibold transition-all glow-interactive"
-          style={{
-            background: isAdmin ? 'hsl(280 60% 50% / 0.2)' : 'hsl(0 0% 100% / 0.08)',
-            border: '1px solid hsl(var(--gold) / 0.3)',
-            color: 'hsl(var(--gold))',
-          }}
-        >
-          <Shield className="w-3 h-3" />
-          {isAdmin ? 'Admin Panel' : 'Admin'}
-        </button>
       </header>
 
       {/* Icon Row */}
