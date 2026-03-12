@@ -36,7 +36,7 @@ export function StatusBar({ gameTime, sessionStatus }: StatusBarProps) {
 
   const boxes = [
     { label: 'Date', value: dateStr },
-    { label: 'Timer', value: elapsed },
+    { label: 'Timer', value: countdown },
     { label: 'Game Time', value: formatTime(gameTime) },
   ];
 
