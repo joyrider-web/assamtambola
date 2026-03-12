@@ -17,13 +17,26 @@ export function StatusBar({ gameTime, sessionStatus }: StatusBarProps) {
   const dateStr = `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()}`;
 
   const isActive = sessionStatus === 'active';
-  const elapsed = isActive
-    ? `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
-    : '0:0:0';
+
+  // Calculate countdown to game time
+  const getCountdown = () => {
+    if (isActive) return 'LIVE';
+    const [h, m] = gameTime.split(':').map(Number);
+    const target = new Date(now);
+    target.setHours(h, m, 0, 0);
+    if (target <= now) target.setDate(target.getDate() + 1);
+    const diff = Math.max(0, Math.floor((target.getTime() - now.getTime()) / 1000));
+    const hrs = Math.floor(diff / 3600);
+    const mins = Math.floor((diff % 3600) / 60);
+    const secs = diff % 60;
+    return `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+  };
+
+  const countdown = getCountdown();
 
   const boxes = [
     { label: 'Date', value: dateStr },
-    { label: 'Timer', value: elapsed },
+    { label: 'Timer', value: countdown },
     { label: 'Game Time', value: formatTime(gameTime) },
   ];
 
