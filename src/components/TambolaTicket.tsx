@@ -22,7 +22,10 @@ export function TambolaTicket({ ticket, drawnNumbers, playerName, playerIndex, i
         >
           {playerIndex}
         </div>
-        <span className="text-sm font-bold text-white truncate flex-1">
+        <span
+          className="text-sm font-bold text-white truncate flex-1 px-2 py-0.5 rounded-md"
+          style={{ background: isBooked ? 'hsl(120 40% 40%)' : 'hsl(280 50% 50%)' }}
+        >
           {isBooked ? playerName : 'UNSOLD'}
         </span>
         <span
