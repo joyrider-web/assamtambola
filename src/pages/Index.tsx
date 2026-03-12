@@ -279,8 +279,9 @@ export default function Index() {
                           ))}
                           {playerTickets.length === 0 && (
                             <p className="text-muted-foreground text-xs text-center py-2">No ticket assigned</p>
-                          )}
-                        </div>
+              )}
+              )}
+            </div>
                       );
                     })}
                   </div>
