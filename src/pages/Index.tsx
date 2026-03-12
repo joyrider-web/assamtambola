@@ -192,7 +192,7 @@ export default function Index() {
             {/* Left sidebar */}
             <div className="xl:col-span-1">
               <div className="xl:sticky xl:top-4">
-                {isGameActive && (
+                {(isGameActive || session?.status === 'completed') && (
                   <NumberBoard drawnNumbers={drawnNumbers} currentNumber={session?.current_number} />
                 )}
 
