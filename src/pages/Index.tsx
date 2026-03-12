@@ -97,6 +97,7 @@ export default function Index() {
   }
 
   const isGameActive = session?.status === 'active';
+  const isGameOver = session?.status === 'completed';
 
   return (
     <div className="min-h-screen" style={{ background: 'var(--gradient-bg)' }}>
@@ -128,21 +129,25 @@ export default function Index() {
       {/* CHECK AVAILABLE TICKETS / GAME IS LIVE button */}
       <div className="px-4 pb-4">
         <button
-          onClick={() => !isGameActive && setIsBookingOpen(true)}
+          onClick={() => !isGameActive && !isGameOver && setIsBookingOpen(true)}
           className={`w-full max-w-md mx-auto block rounded-xl px-4 py-3.5 font-body font-bold text-sm tracking-wider transition-all ${
-            isGameActive ? 'animate-pulse-live cursor-default' : 'glow-interactive cursor-pointer hover:scale-[1.02]'
+            isGameActive ? 'animate-pulse-live cursor-default' : isGameOver ? 'cursor-default' : 'glow-interactive cursor-pointer hover:scale-[1.02]'
           }`}
           style={{
             background: isGameActive
               ? 'linear-gradient(135deg, hsl(120 70% 35%), hsl(150 60% 40%))'
+              : isGameOver
+              ? 'linear-gradient(135deg, hsl(0 70% 40%), hsl(20 60% 35%))'
               : 'var(--gradient-purple-btn)',
-            color: isGameActive ? 'hsl(0 0% 100%)' : 'hsl(330 80% 80%)',
+            color: isGameActive || isGameOver ? 'hsl(0 0% 100%)' : 'hsl(330 80% 80%)',
             boxShadow: isGameActive
               ? '0 0 20px hsl(120 80% 40% / 0.4)'
+              : isGameOver
+              ? '0 0 20px hsl(0 80% 40% / 0.4)'
               : 'var(--shadow-purple-glow)',
           }}
         >
-          {isGameActive ? '🔴 GAME IS LIVE' : 'CHECK AVAILABLE TICKETS'}
+          {isGameActive ? '🔴 GAME IS LIVE' : isGameOver ? '🏁 GAME IS OVER' : 'CHECK AVAILABLE TICKETS'}
         </button>
       </div>
 
