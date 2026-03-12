@@ -216,9 +216,30 @@ export default function Index() {
               </div>
             </div>
 
-            {/* Right: Players & Tickets */}
+            {/* Right: Players & Tickets OR Winners */}
             <div className="xl:col-span-3">
-              {players.length === 0 ? (
+              {session?.status === 'completed' ? (
+                <div>
+                  <div className="flex items-center gap-3 mb-5">
+                    <h2 className="font-display text-2xl text-gold">🏆 Game Over — Winners</h2>
+                    <div className="decorative-line flex-1" />
+                  </div>
+                  {winners.filter(w => w.confirmed).length > 0 ? (
+                    <WinnerPanel
+                      sessionId={session.id}
+                      players={players}
+                      tickets={tickets}
+                      drawnNumbers={drawnNumbers}
+                      winners={winners}
+                      onRefetch={refetch}
+                    />
+                  ) : (
+                    <div className="gradient-card border gold-border rounded-2xl p-12 max-w-md mx-auto shadow-card text-center">
+                      <p className="text-muted-foreground text-sm">No winners this session.</p>
+                    </div>
+                  )}
+                </div>
+              ) : players.length === 0 ? (
                 <div className="text-center py-20">
                   <div className="gradient-card border gold-border rounded-2xl p-12 max-w-md mx-auto shadow-card">
                     <Users className="w-16 h-16 mx-auto mb-4 text-gold opacity-50" />
