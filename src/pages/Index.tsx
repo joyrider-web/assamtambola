@@ -97,6 +97,7 @@ export default function Index() {
   }
 
   const isGameActive = session?.status === 'active';
+  const isGameOver = session?.status === 'completed';
 
   return (
     <div className="min-h-screen" style={{ background: 'var(--gradient-bg)' }}>
