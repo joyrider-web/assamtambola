@@ -12,7 +12,7 @@ import { IconRow } from '@/components/IconRow';
 import { StatusBar } from '@/components/StatusBar';
 import { formatTime } from '@/lib/supabase-helpers';
 import { announceNumber, announceGameStart, announceGameOver, announceWinner } from '@/hooks/useVoiceAnnouncer';
-import { Users, Shield } from 'lucide-react';
+import { Users } from 'lucide-react';
 
 export default function Index() {
   const { players, tickets, session, drawnNumbers, winners, gameTime, loading, refetch, prevSessionStatus, prevDrawnCount, prevWinnerCount } = useGameStore();
