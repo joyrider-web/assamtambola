@@ -75,13 +75,13 @@ export function BookingDashboard({ players, onClose }: BookingDashboardProps) {
                   key={player.id}
                   onClick={() => toggleSelect(idx)}
                   disabled={isBooked}
-                  className="relative flex items-center justify-center rounded text-[10px] font-bold transition-all border"
+                  className="relative flex items-center justify-center rounded-sm text-[9px] font-bold transition-all border"
                   style={{
                     background: bg,
                     color: textColor,
                     borderColor: '#d946ef',
                     cursor: isBooked ? 'not-allowed' : 'pointer',
-                    height: '28px',
+                    height: '20px',
                   }}
                 >
                   {idx + 1}
