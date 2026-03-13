@@ -88,9 +88,6 @@ export function BookingDashboard({ players, onClose }: BookingDashboardProps) {
                     }}
                   >
                     {idx + 1}
-                    {isSelected && (
-                      <Check className="absolute w-3 h-3" />
-                    )}
                   </button>
                 );
               })}
