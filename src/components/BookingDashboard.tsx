@@ -61,7 +61,7 @@ export function BookingDashboard({ players, onClose }: BookingDashboardProps) {
 
         {/* Scrollable ticket grid */}
         <div className="flex-1 overflow-y-auto px-4 py-2 min-h-0">
-          <div className="grid grid-cols-6 gap-1">
+          <div className="grid grid-cols-10 gap-0.5">
             {players.map((player, idx) => {
               const isBooked = player.is_booked;
               const isSelected = selected.has(idx);
@@ -75,12 +75,13 @@ export function BookingDashboard({ players, onClose }: BookingDashboardProps) {
                   key={player.id}
                   onClick={() => toggleSelect(idx)}
                   disabled={isBooked}
-                  className="relative aspect-square flex items-center justify-center rounded text-xs font-bold transition-all border"
+                  className="relative flex items-center justify-center rounded text-[10px] font-bold transition-all border"
                   style={{
                     background: bg,
                     color: textColor,
                     borderColor: '#d946ef',
                     cursor: isBooked ? 'not-allowed' : 'pointer',
+                    height: '28px',
                   }}
                 >
                   {idx + 1}
