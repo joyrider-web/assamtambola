@@ -67,9 +67,8 @@ export function BookingDashboard({ players, onClose }: BookingDashboardProps) {
               {players.map((player, idx) => {
                 const isBooked = player.is_booked;
                 const isSelected = selected.has(idx);
-                let bg = '#facc15';
+                let bg = '#ffffff';
                 let textColor = '#000';
-                if (!isBooked && !isSelected) { bg = '#facc15'; }
                 if (isBooked) { bg = '#facc15'; textColor = '#000'; }
                 if (isSelected) { bg = '#3b82f6'; textColor = '#fff'; }
 
