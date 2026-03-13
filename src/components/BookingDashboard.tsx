@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { X, Check } from 'lucide-react';
+import { X } from 'lucide-react';
 import { Player } from '@/hooks/useGameStore';
 
 interface BookingDashboardProps {
@@ -88,9 +88,6 @@ export function BookingDashboard({ players, onClose }: BookingDashboardProps) {
                     }}
                   >
                     {idx + 1}
-                    {isSelected && (
-                      <Check className="absolute w-3 h-3" />
-                    )}
                   </button>
                 );
               })}
