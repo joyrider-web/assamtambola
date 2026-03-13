@@ -107,11 +107,7 @@ export default function Index() {
       </header>
 
       {/* Icon Row */}
-      <IconRow
-        onAdminClick={() => isAdmin ? setShowAdminPanel(true) : setShowAdminLogin(true)}
-        isAdmin={isAdmin}
-        onAdminLogout={isAdmin ? handleLogout : undefined}
-      />
+      <IconRow onAdminClick={() => isAdmin ? setShowAdminPanel(true) : setShowAdminLogin(true)} isAdmin={isAdmin} />
 
       {/* Status Bar */}
       <StatusBar gameTime={gameTime} sessionStatus={session?.status} />

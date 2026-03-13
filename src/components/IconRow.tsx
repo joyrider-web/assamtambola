@@ -1,13 +1,12 @@
 import { useState } from 'react';
-import { Phone, MessageCircle, User, Lock, X } from 'lucide-react';
+import { Phone, MessageCircle, User, Lock } from 'lucide-react';
 
 interface IconRowProps {
   onAdminClick?: () => void;
   isAdmin?: boolean;
-  onAdminLogout?: () => void;
 }
 
-export function IconRow({ onAdminClick, isAdmin, onAdminLogout }: IconRowProps) {
+export function IconRow({ onAdminClick, isAdmin }: IconRowProps) {
   const [showPopup, setShowPopup] = useState(false);
 
   const icons = [
@@ -30,18 +29,6 @@ export function IconRow({ onAdminClick, isAdmin, onAdminLogout }: IconRowProps) 
           <Icon className="w-5 h-5" style={{ color }} />
         </button>
       ))}
-
-      {/* Admin logout X button */}
-      {isAdmin && onAdminLogout && (
-        <button
-          onClick={onAdminLogout}
-          className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center transition-transform hover:scale-110"
-          style={{ background: 'hsl(0 70% 50%)', border: '1.5px solid hsl(0 0% 100%)' }}
-          title="Exit Admin Access"
-        >
-          <X className="w-4 h-4" style={{ color: 'hsl(0 0% 100%)' }} />
-        </button>
-      )}
 
       {/* Login type popup */}
       {showPopup && (
