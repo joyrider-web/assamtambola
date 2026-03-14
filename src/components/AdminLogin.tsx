@@ -7,6 +7,7 @@ import { Loader2, Lock, User } from 'lucide-react';
 
 interface AdminLoginProps {
   onSuccess: () => void;
+  onClose?: () => void;
 }
 
 export function AdminLogin({ onSuccess }: AdminLoginProps) {
