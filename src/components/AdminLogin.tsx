@@ -3,7 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Loader2, Lock, User } from 'lucide-react';
+import { Loader2, Lock, User, X } from 'lucide-react';
 
 interface AdminLoginProps {
   onSuccess: () => void;
