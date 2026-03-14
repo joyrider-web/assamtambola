@@ -92,6 +92,7 @@ export default function Index() {
         winners={winners}
         gameTime={gameTime}
         onLogout={handleLogout}
+        onClose={() => setShowAdminPanel(false)}
         onRefetch={refetch}
       />
     );
