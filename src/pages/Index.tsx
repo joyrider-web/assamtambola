@@ -263,7 +263,7 @@ export default function Index() {
                               ticket={ticket}
                               drawnNumbers={drawnNumbers}
                               playerName={player.name}
-                              playerIndex={idx + 1}
+                              playerIndex={player.display_order + 1}
                               isBooked={player.is_booked}
                               compact
                             />
