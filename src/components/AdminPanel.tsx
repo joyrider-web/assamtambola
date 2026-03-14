@@ -155,9 +155,13 @@ export function AdminPanel({
           <h1 className="font-display text-2xl md:text-3xl text-gold glow-text">Admin Panel</h1>
           <p className="text-muted-foreground text-sm">ASSAM TAMBOLA Control</p>
         </div>
-        <Button variant="ghost" onClick={onLogout} className="text-muted-foreground hover:text-foreground gap-2">
-          <LogOut className="w-4 h-4" /> Logout
-        </Button>
+        <button
+          onClick={onClose || onLogout}
+          className="w-8 h-8 rounded-full flex items-center justify-center transition-opacity hover:opacity-100 opacity-70"
+          style={{ background: 'hsl(0 0% 100% / 0.1)' }}
+        >
+          <X className="w-5 h-5 text-foreground" />
+        </button>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
