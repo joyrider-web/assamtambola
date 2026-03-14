@@ -39,7 +39,8 @@ export function AdminPanel({
   const addPlayer = async () => {
     if (!newPlayerName.trim()) return;
     setLoading('addPlayer');
-    const order = players.length;
+    const maxOrder = players.reduce((max, p) => Math.max(max, p.display_order), -1);
+    const order = maxOrder + 1;
     const { data: playerData, error } = await supabase
       .from('players')
       .insert({ name: newPlayerName.trim(), display_order: order })
