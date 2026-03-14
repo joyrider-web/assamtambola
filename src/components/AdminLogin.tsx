@@ -3,13 +3,14 @@ import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Loader2, Lock, User } from 'lucide-react';
+import { Loader2, Lock, User, X } from 'lucide-react';
 
 interface AdminLoginProps {
   onSuccess: () => void;
+  onClose?: () => void;
 }
 
-export function AdminLogin({ onSuccess }: AdminLoginProps) {
+export function AdminLogin({ onSuccess, onClose }: AdminLoginProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -49,7 +50,16 @@ export function AdminLogin({ onSuccess }: AdminLoginProps) {
   return (
     <div className="min-h-screen gradient-hero flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        <div className="gradient-card border gold-border rounded-2xl p-8 shadow-card animate-slide-up">
+        <div className="gradient-card border gold-border rounded-2xl p-8 shadow-card animate-slide-up relative">
+          {onClose && (
+            <button
+              onClick={onClose}
+              className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center transition-opacity hover:opacity-100 opacity-70"
+              style={{ background: 'hsl(0 0% 100% / 0.1)' }}
+            >
+              <X className="w-4 h-4 text-foreground" />
+            </button>
+          )}
           <div className="text-center mb-8">
             <div className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center animate-pulse-gold"
               style={{ background: 'var(--gradient-gold)' }}>

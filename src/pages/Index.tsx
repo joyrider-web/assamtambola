@@ -77,6 +77,7 @@ export default function Index() {
           setShowAdminLogin(false);
           setShowAdminPanel(true);
         }}
+        onClose={() => setShowAdminLogin(false)}
       />
     );
   }
