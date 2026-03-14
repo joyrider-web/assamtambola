@@ -22,6 +22,7 @@ interface AdminPanelProps {
   winners: Winner[];
   gameTime: string;
   onLogout: () => void;
+  onClose?: () => void;
   onRefetch: () => void;
 }
 
