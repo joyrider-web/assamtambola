@@ -27,7 +27,7 @@ interface AdminPanelProps {
 }
 
 export function AdminPanel({
-  players, tickets, session, drawnNumbers, winners, gameTime, onLogout, onRefetch
+  players, tickets, session, drawnNumbers, winners, gameTime, onLogout, onClose, onRefetch
 }: AdminPanelProps) {
   const [newPlayerName, setNewPlayerName] = useState('');
   const [editingPlayer, setEditingPlayer] = useState<string | null>(null);
